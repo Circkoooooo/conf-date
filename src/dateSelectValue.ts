@@ -1,48 +1,50 @@
-export type detailConfig = {
-	startTime?: number
-	endTime?: number
-	value?: string
+export type DetailConfig = {
+	startTime: number
+	endTime: number
+	value: string
+	calcType: 'hour' | 'minute' | 'mill'
 }[]
 
+export type RequireData = {
+	hour?: number
+	minute?: number
+	mill?: number
+}
+
 export type DateConfigType = {
-	requireDate: string
-	config: detailConfig
+	requireData: RequireData
+	config: DetailConfig
 }
 
 /**
  * 提供一个配置。这个requireDate YY-MM-DD HH:mm:ss
- * 2022-06-18 00:00:00
+ *
  * @param dateConfig
  * @returns
  */
 export const dateSelectValue = (
 	dateConfig: DateConfigType
 ): (string | undefined)[] => {
-	const { config, requireDate } = dateConfig
-	//检测date的格式是否正确。一定要满足YY-MM-DD HH:mm:ss
-
-	//
-	const data = getFullData(requireDate)
-	const hour = data[3]
-	// 得到了可以使用的value
+	const { config, requireData } = dateConfig
+	let diffValue: number
 	const availableValue = config.map(item => {
-		if (
-			item.endTime !== undefined &&
-			item.startTime !== undefined &&
-			item.startTime <= parseInt(hour) &&
-			item.endTime >= parseInt(hour)
-		) {
+		diffValue = -1
+		//把需要比对的参数的value记录下来
+		for (const [key, value] of Object.entries(requireData)) {
+			if (item.calcType === key) {
+				diffValue = value
+			}
+		}
+		if (diffValue === -1) {
+			throw Error(
+				'Did you offer it a correct calcType parameter in the config?'
+			)
+		}
+		if (item.startTime <= diffValue && item.endTime >= diffValue) {
 			return item.value
 		}
 	})
 	return availableValue.filter(item => {
 		return item !== undefined
 	})
-}
-
-const getFullData = (requireDate: string): Array<string> => {
-	const [date, time] = requireDate.split(' ')
-	const [year, mouth, day] = date.split('-')
-	const [hour, minute, second] = time.split(':')
-	return [year, mouth, day, hour, minute, second]
 }

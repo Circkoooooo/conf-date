@@ -1,17 +1,19 @@
 import { dateSelectValue, DateConfigType } from '../src/dateSelectValue'
 
 const dateConfig: DateConfigType = {
-	requireDate: '2022-06-18 10:00:00',
+	requireData: { hour: 21, minute: 48 },
 	config: [
 		{
 			startTime: 1,
-			endTime: 12,
+			endTime: 22,
 			value: '刚刚',
+			calcType: 'hour',
 		},
 		{
-			startTime: 2,
-			endTime: 12,
+			startTime: 47,
+			endTime: 48,
 			value: '不久前',
+			calcType: 'minute',
 		},
 	],
 }
