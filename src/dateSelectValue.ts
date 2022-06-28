@@ -18,7 +18,6 @@ export type DateConfigType = {
 
 /**
  * 提供一个配置。这个requireDate YY-MM-DD HH:mm:ss
- *
  * @param dateConfig
  * @returns
  */
@@ -37,7 +36,7 @@ export const dateSelectValue = (
 		}
 		if (diffValue === -1) {
 			throw Error(
-				'Did you offer it a correct calcType parameter in the config?'
+				'Did you set a correct calcType parameter in the config?'
 			)
 		}
 		if (item.startTime <= diffValue && item.endTime >= diffValue) {
